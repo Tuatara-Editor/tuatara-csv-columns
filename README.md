@@ -75,6 +75,10 @@ run on over a line end.
 - awk: columns rearranged as its `print` writes them.
 - csvdt, by the same author: columns counted from 0 as it counts them.
 
+## License
+
+GPL-3.0-or-later; see `LICENSE` at the top of this repository.
+
 ## Working on it
 
 ```sh

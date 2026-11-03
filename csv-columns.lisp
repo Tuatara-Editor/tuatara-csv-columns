@@ -1,5 +1,6 @@
 ;;;; csv-columns.lisp --- The columns of a CSV file rearranged as awk prints them.
 ;;;; Copyright (C) 2026 Michael A Jones.  GPL-3.0-or-later; see LICENSE.
+;;;; Needs: Tuatara 0.90.13
 ;;;;
 ;;;; A package, not part of the editor: loaded by (load-package "csv-columns")
 ;;;; in the init file.
@@ -23,7 +24,8 @@
 
 (defun parse-layout (spec)
   "The columns SPEC asks for: columns separated by commas, each made of $N
-\(field N, counted from 0; $NF the last, $* the whole record) and \"text\"
+\(field N, counted from 0; $NF the last, from the number of fields (NF);
+$* the whole record) and \"text\"
 \(\\\" a quote, \\\\ a backslash inside), side by side to join them. A list of
 columns, each a list of its parts: a field's index, :LAST, :RECORD, or a
 string. An error says where SPEC is not understood."
@@ -198,8 +200,8 @@ line of a large file is."
   "Rearrange the columns of every record, the columns asked for counted from
 0: $0,$1,$3,$4\"cent\",\"hello\" leaves out the third column, joins cent to
 the fifth's value and adds a column holding hello. $N is field N from 0, $NF
-the last, $* the whole record (alone, its own columns; joined, one column of
-its text as written); \"text\" is text as it is, joined to what stands
+the last, from the number of fields (NF), $* the whole record (alone, its own
+columns; joined, one column of its text as written); \"text\" is text as it is, joined to what stands
 beside it. A field alone keeps its quotes as written; joined text is quoted
 when it holds the separator or a quote. Records that come out as they were
 are left as they are. A field a record lacks is
@@ -223,10 +225,10 @@ the background."
 ;;; Keys
 
 (defun install-csv-columns ()
-  "Bind the package's keys in CSV and TSV buffers, under C-c r."
+  "Bind the package's keys in CSV and tab-separated values (TSV) buffers, under C-c r."
   (define-keys (mode-keymap 'csv-mode) '(("C-c r a" csv-rearrange-columns)))
   (label-keys (mode-keymap 'csv-mode) '(("C-c r" "csv-columns")))
-  (commands-for-mode 'csv-mode "a CSV or TSV buffer, with the csv-columns package"
+  (commands-for-mode 'csv-mode "a CSV or tab-separated values (TSV) buffer, with the csv-columns package"
                      'csv-rearrange-columns))
 
 (install-csv-columns)
