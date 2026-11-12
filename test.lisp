@@ -15,7 +15,9 @@
 with a carriage return and a newline. With ON-DISK, the work goes to disk in
 tiny pieces, a few lines each, so that a small text exercises it."
   (flet ((run ()
-           (session-text (nth-value 1 (run-keys-in-turns (list (format nil "M-x ~a RET ~a" (csv-columns-keys mode) keys) "")
+           (session-text (nth-value 1 (run-keys-in-turns (list (format nil "M-x ~a RET ~a"
+                                                                       (csv-columns-keys mode) keys)
+                                                               "")
                                                          :text text :width 100 :crlf crlf)))))
     (if on-disk
         (let ((tuatara.defaults::*rewrite-piece* 16)
@@ -60,14 +62,16 @@ tiny pieces, a few lines each, so that a small text exercises it."
   (dolist (on-disk '(nil t))
     ;; every line, the header too
     (is string= (format nil "NOTE,NAME,NOTE!~%tea,Ann,tea!~%coffee,Bob,coffee!~%\"said \"\"hi\"\"\",Cat,\"said \"\"hi\"\"!\"~%,Dan,!~%")
-        (csv-columns-after (format nil "C-c r a ~a RET" (csv-columns-keys "$2,$0,$2\"!\"")) *csv-columns-sample* :on-disk on-disk)))
+        (csv-columns-after (format nil "C-c r a ~a RET" (csv-columns-keys "$2,$0,$2\"!\""))
+                           *csv-columns-sample* :on-disk on-disk)))
   ;; a CRLF file keeps its line ends
   (is string= (format nil "b,a~a~%d,c~a~%" #\Return #\Return)
       (csv-columns-after "C-c r a $ 1 , $ 0 RET" (format nil "a,b~a~%c,d~a~%" #\Return #\Return) :crlf t)))
 
 (define-test (csv-columns whole-record-joined)
   ;; $* joined to text is one column of the record as written, its quotes doubled
-  (is string= "\"\"\"a\"\",\"\"b\"\"x\"" (csv-columns::rearranged-record "\"a\",\"b\"" 7 44 (csv-columns::parse-layout "$*\"x\"")))
+  (is string= "\"\"\"a\"\",\"\"b\"\"x\""
+      (csv-columns::rearranged-record "\"a\",\"b\"" 7 44 (csv-columns::parse-layout "$*\"x\"")))
   (is string= "\"a,b!\"" (csv-columns::rearranged-record "a,b" 3 44 (csv-columns::parse-layout "$*\"!\""))))
 
 (define-test (csv-columns unchanged-records-kept)

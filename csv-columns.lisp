@@ -122,7 +122,8 @@ space."
                 thereis (cond ((stringp part) (look part 0 (length part)))
                               ((eq part :record) (look text from length))
                               (t (multiple-value-bind (start end)
-                                     (multiple-value-call #'csv-value-bounds text (field-span text from length delimiter spans count part))
+                                     (multiple-value-call #'csv-value-bounds text
+                                       (field-span text from length delimiter spans count part))
                                    (look text start end)))))
           (eql first-char #\Space)
           (eql last-char #\Space)))))
@@ -150,7 +151,8 @@ a bit for each column of LAYOUT, 1 for one to be quoted. Where it ends."
                                     ;; the whole record as it is written
                                     ((eq part :record) (put-value out at text from length nil quote))
                                     (t (multiple-value-bind (start end quoted)
-                                           (multiple-value-call #'csv-value-bounds text (field-span text from length delimiter spans count part))
+                                           (multiple-value-call #'csv-value-bounds text
+                                             (field-span text from length delimiter spans count part))
                                          (put-value out at text start end quoted quote))))))
                    (when quote (when out (setf (schar out at) #\")) (incf at))))
              (when more
@@ -172,9 +174,9 @@ once: one more than the largest index it names, at least one, at most
 (defun rearranged-record (text length delimiter layout &optional (width (layout-width layout)))
   "The record TEXT holds in its first LENGTH characters, its columns as
 LAYOUT (PARSE-LAYOUT) asks, DELIMITER the code of the separator, WIDTH its
-LAYOUT-WIDTH: a column of one field alone is that field as written; one
+LAYOUT-WIDTH. A column of one field alone is that field as written. One
 joining several parts, or a text, is written anew, quoted when it needs to
-be (a quote inside doubled); $* there is the record as it is written. A
+be (a quote inside doubled). $* there is the record as it is written. A
 field the record lacks is empty. A byte-order mark the record begins with,
 as a file's first line may, is no part of its first field and stays at its
 start. T when the record comes out as it was. The record is read once and

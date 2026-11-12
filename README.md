@@ -62,9 +62,9 @@ a,b,c,d,e   ->   a,b,d,ecent,hello
 
 ## Large files
 
-Each command is one step to undo (`u`). A large file is done in the
-background on all but two cores, `P` lit in the mode line (`C-x j` shows how far it
-has got), the editor answering meanwhile. On an 11.5 GB file of 100 million records,
+Each command is one step to undo (`u`). A large file is done in the background
+on all but two cores, `P` lit in the mode line (`C-x j` shows how far it has
+got), the editor answering meanwhile. On an 11.5 GB file of 100 million records,
 rearranging every record as above took 30 seconds.
 
 A record is a line, as Tuatara's CSV mode reads one: a quoted field does not
@@ -86,7 +86,7 @@ tools/test.sh
 ```
 
 runs its tests against a Tuatara source tree: `../tuatara` beside this
-repository, or `../../tuatara` beside the folder it is in, unless
+repository, or `../../tuatara` beside the directory it is in, unless
 `TUATARA_SOURCE` names another. How a package is laid out and which of
 Tuatara's names it may use are in Tuatara's
 [HACKING.org](https://github.com/Tuatara-Editor/tuatara/blob/main/HACKING.org);
