@@ -203,13 +203,13 @@ line of a large file is."
 0: $0,$1,$3,$4\"cent\",\"hello\" leaves out the third column, joins cent to
 the fifth's value and adds a column holding hello. $N is field N from 0, $NF
 the last, from the number of fields (NF), $* the whole record (alone, its own
-columns; joined, one column of its text as written); \"text\" is text as it is, joined to what stands
-beside it. A field alone keeps its quotes as written; joined text is quoted
-when it holds the separator or a quote. Records that come out as they were
-are left as they are. A field a record lacks is
-empty. The header line is rearranged too, like every other. The lines the
-selection touches, or every line; one step to undo; a large file is done in
-the background."
+columns; joined, one column of its text as written); \"text\" is text as it
+is, joined to what stands beside it. A field alone keeps its quotes as
+written; joined text is quoted when it holds the separator or a quote.
+Records that come out as they were are left as they are. A field a record
+lacks is empty. The header line is rearranged too, like every other. The
+lines the selection touches, or every line; one step to undo; a large file is
+done in the background."
   (let* ((buffer (current-buffer))
          (spec (read-string "Columns from $0 ($0,$2,$1\"text\"): "))
          (delimiter (csv-delimiter buffer)))
@@ -227,7 +227,8 @@ the background."
 ;;; Keys
 
 (defun install-csv-columns ()
-  "Bind the package's keys in CSV and tab-separated values (TSV) buffers, under C-c r."
+  "Bind the package's keys in CSV and tab-separated values (TSV) buffers, under
+C-c r."
   (define-keys (mode-keymap 'csv-mode) '(("C-c r a" csv-rearrange-columns)))
   (label-keys (mode-keymap 'csv-mode) '(("C-c r" "csv-columns")))
   (commands-for-mode 'csv-mode "a CSV or tab-separated values (TSV) buffer, with the csv-columns package"
