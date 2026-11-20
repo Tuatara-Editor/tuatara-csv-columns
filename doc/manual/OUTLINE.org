@@ -1,0 +1,9 @@
+#+title: csv-columns manual: chapters
+
+Each chapter covers one part of csv-columns. The last chapter lists every
+command and setting, generated from the source.
+
+1. What csv-columns is
+2. Rearranging columns
+3. Large files and limits
+4. Every command and setting

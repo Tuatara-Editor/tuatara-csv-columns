@@ -1,0 +1,37 @@
+#+title: What csv-columns is
+#+language: en
+
+* What csv-columns is
+
+The package that rearranges the columns of a CSV or TSV file as awk's =print=
+does.
+
+csv-columns adds one command to Tuatara's CSV mode. It reads a list of columns,
+such as =$0,$2,$1"text"=, and rewrites every record of the buffer to hold
+those columns, in that order. A column can be a field of the record, a piece of
+text, or the two joined.
+
+The package does not keep, delete, show or hide records by the value of a
+column. Tuatara does that itself: ~C-x / k~, ~C-x / d~, ~C-x / f~ and ~C-x / h~.
+They are in the editor's manual.
+
+** Where it works
+
+The command is bound in CSV mode, and so in a buffer of a CSV file or a TSV
+(tab-separated values) file. The separator is the one the mode found for the
+buffer, a comma or a tab. In any other buffer the command is not bound.
+
+A record is a line, as CSV mode reads one. A quoted field does not run on over
+a line end.
+
+** Counting from 0
+
+Columns are counted from 0, as csvdt counts them. =$0= is the first column and
+=$1= the second. =$*= is the whole record, as in csvdt, and =$NF= is the last
+column of each record.
+
+** The key
+
+All the package's keys are under ~C-c r~, which Tuatara labels =csv-columns=
+in the key help. There is one key so far: ~C-c r a~ runs =csv-rearrange-columns=.
+Chapter 4 lists it.

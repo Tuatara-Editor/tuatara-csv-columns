@@ -1,74 +1,55 @@
 # csv-columns
 
-The columns of every record of a CSV or TSV file rearranged as awk's `print`
-does. Keeping, deleting, showing and hiding records by a column is
-Tuatara's own: `C-x / k`, `C-x / d`, `C-x / f` and `C-x / h`.
+Read the manual:
+[tuatara-editor.github.io/tuatara-csv-columns](https://tuatara-editor.github.io/tuatara-csv-columns/).
 
-Columns are counted from 0, as [csvdt](https://github.com/yardquit/csvdt)
-counts them: `$0` is the first column.
+The columns of every record of a CSV or TSV file, rearranged as awk's `print`
+does. One of the Tuatara project's packages, not part of the editor.
 
-## Loading it, step by step
+`C-c r a` in a CSV buffer asks for the columns you want, such as
+`$0,$2,$1"text"`, and rewrites the file to hold them. Columns are counted from
+0, as [csvdt](https://github.com/yardquit/csvdt) counts them. The manual says
+what a column can be, how it is written and how large files are handled.
 
-1. **Install what it needs.** Nothing.
-2. **Open your init file**: in Tuatara press `C-x C-f`, type
+## What it needs
+
+- Tuatara 0.90.13 or later.
+- Nothing else.
+
+## Installing it, step by step
+
+1. **Open your init file**: in Tuatara press `C-x C-f`, type
    `~/.config/tuatara/init.lisp` and press `RET`.
-3. **Add these lines** to it (the first line only once, whichever of the
-   project's packages you load):
+2. **Add this line** to it:
 
    ```lisp
    (load-package "csv-columns" :source "https://github.com/Tuatara-Editor/tuatara-csv-columns")
    ```
 
-4. **Save** with `C-x C-s`, **quit** with `C-x C-c`, and **start Tuatara
+3. **Save** with `C-x C-s`, **quit** with `C-x C-c`, and **start Tuatara
    again**. Answer `y` when it asks whether to load csv-columns; it asks once.
-5. **Check it**: open a CSV file; `C-c r a` rearranges its columns.
+4. **Check it**: open a CSV file and press `C-c r a`.
 
-## Commands
+## On a machine without internet
 
-In a CSV or TSV buffer, under `C-c r`:
+Tuatara compiles the package itself, so only fetching it needs the internet.
+On a machine with internet:
 
-| Key | Command | What it does |
-|---|---|---|
-| `C-c r a` | `csv-rearrange-columns` | Rearranges the columns of every line as awk's `print` would. |
-
-### Rearranging columns
-
-`C-c r a` asks for the columns as awk's `print` writes them, counted from 0:
-
-```
-$0,$1,$3,$4"cent","hello"
+```sh
+git clone https://github.com/Tuatara-Editor/tuatara-csv-columns
+git -C tuatara-csv-columns verify-tag "$(git -C tuatara-csv-columns describe --tags --abbrev=0)"
 ```
 
-on five columns leaves out the third (`$2`), joins `cent` to the value of the
-fifth and adds a sixth column, now the fifth, holding `hello`:
+Copy the directory to the other machine, for instance to
+`~/tuatara-packages/tuatara-csv-columns`, and name it in the init file:
 
+```lisp
+(load-package "csv-columns" :source "~/tuatara-packages/tuatara-csv-columns")
 ```
-a,b,c,d,e   ->   a,b,d,ecent,hello
-```
 
-- `$N` is column N from 0, `$NF` the last column of each record, `$*` the
-  whole record: alone, its columns stay its own; joined to other parts, it is
-  one column holding the record's text as written.
-- `"text"` is text as it is (`\"` a quote, `\\` a backslash). Parts side by
-  side are joined: `$4"cent"`, `$2" "$0`.
-- A column of one field alone is written exactly as it stood, its quotes
-  kept. A column joined from parts is quoted when it needs to be (it holds
-  the separator, a quote or a line end, or begins or ends with a space), a
-  quote inside doubled.
-- A column a record lacks is empty, as in awk.
-- Every line is rearranged, the header too, as awk would; with a selection,
-  only the lines it touches. A line that comes out as it was is left alone,
-  and not counted as rearranged.
-
-## Large files
-
-Each command is one step to undo (`u`). A large file is done in the background
-on all but two cores, `P` lit in the mode line (`C-x j` shows how far it has
-got), the editor answering meanwhile. On an 11.5 GB file of 100 million records,
-rearranging every record as above took 30 seconds.
-
-A record is a line, as Tuatara's CSV mode reads one: a quoted field does not
-run on over a line end.
+Carrying over the compiled files as well, so the other machine skips the
+compiling, is in Tuatara's manual, chapter 19, "On a machine without
+internet".
 
 ## Credits
 
@@ -91,4 +72,6 @@ repository, or `../../tuatara` beside the directory it is in, unless
 Tuatara's names it may use are in Tuatara's
 [HACKING.org](https://github.com/Tuatara-Editor/tuatara/blob/main/HACKING.org);
 bug reports, ideas and how changes are made in
-[CONTRIBUTING.md](CONTRIBUTING.md).
+[CONTRIBUTING.md](CONTRIBUTING.md). The manual's source is in `doc/manual/`;
+`tools/manual-html.sh` in a Tuatara tree, given this repository's directory,
+makes its pages.
