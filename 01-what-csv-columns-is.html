@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src  'self'; img-src 'self' file:; script-src 'self'; base-uri 'none'; form-action 'none'">
+<title>What csv-columns is &ndash; csv-columns Manual</title>
+<link rel="icon" href="tuatara.png">
+<link rel="stylesheet" href="manual.css">
+<script src="manual.js" defer></script>
+</head>
+<body>
+<div class="site">
+<nav class="toc" id="contents" aria-label="Contents">
+<strong>csv-columns Manual</strong>
+<small>for Tuatara 0.90.13 and later</small>
+<p class="tools"><a href="all.html">All on one page</a>
+<button type="button" class="theme" hidden>Dark</button></p>
+<input type="search" placeholder="Search the manual" aria-label="Search the manual">
+<ol class="chapters"><li id="nav-index"><a href="index.html">0 Contents</a></li><li id="nav-01-what-csv-columns-is" class="here"><a class="here" href="01-what-csv-columns-is.html">1 What csv-columns is</a><ol><li><a href="01-what-csv-columns-is.html#where-it-works">1.1 Where it works</a></li><li><a href="01-what-csv-columns-is.html#counting-from-0">1.2 Counting from 0</a></li><li><a href="01-what-csv-columns-is.html#the-key">1.3 The key</a></li></ol></li><li id="nav-02-rearranging-columns"><a href="02-rearranging-columns.html">2 Rearranging columns</a><ol><li><a href="02-rearranging-columns.html#what-a-column-can-be">2.1 What a column can be</a></li><li><a href="02-rearranging-columns.html#how-a-column-is-written">2.2 How a column is written</a></li><li><a href="02-rearranging-columns.html#which-lines">2.3 Which lines</a></li><li><a href="02-rearranging-columns.html#undoing">2.4 Undoing</a></li></ol></li><li id="nav-03-large-files-and-limits"><a href="03-large-files-and-limits.html">3 Large files and limits</a><ol><li><a href="03-large-files-and-limits.html#large-files">3.1 Large files</a></li><li><a href="03-large-files-and-limits.html#each-record-is-read-once">3.2 Each record is read once</a></li><li><a href="03-large-files-and-limits.html#limits">3.3 Limits</a></li></ol></li><li id="nav-04-every-command-and-setting"><a href="04-every-command-and-setting.html">4 Every command and setting</a><ol><li><a href="04-every-command-and-setting.html#every-command">4.1 Every command</a></li><li><a href="04-every-command-and-setting.html#every-setting">4.2 Every setting</a></li></ol></li></ol>
+</nav>
+<main>
+<article>
+<div class="node"><span>Next: <a href="02-rearranging-columns.html">Rearranging columns</a></span><span>Up: <a href="index.html">Contents</a></span></div>
+<h1 id="what-csv-columns-is">What csv-columns is</h1>
+<p class="lead">The package that rearranges the columns of a CSV or TSV file as awk's <code>print</code>
+does.</p>
+<p>csv-columns adds one command to Tuatara's CSV mode. It reads a list of columns,
+such as <code>$0,$2,$1&quot;text&quot;</code>, and rewrites every record of the buffer to hold
+those columns, in that order. A column can be a field of the record, a piece of
+text, or the two joined.</p>
+<p>The package does not keep, delete, show or hide records by the value of a
+column. Tuatara does that itself: <kbd>C-x / k</kbd>, <kbd>C-x / d</kbd>, <kbd>C-x / f</kbd> and <kbd>C-x / h</kbd>.
+They are in the editor's manual.</p>
+<h2 id="where-it-works"><span class="num">1.1</span> Where it works</h2>
+<p>The command is bound in CSV mode, and so in a buffer of a CSV file or a TSV
+(tab-separated values) file. The separator is the one the mode found for the
+buffer, a comma or a tab. In any other buffer the command is not bound.</p>
+<p>A record is a line, as CSV mode reads one. A quoted field does not run on over
+a line end.</p>
+<h2 id="counting-from-0"><span class="num">1.2</span> Counting from 0</h2>
+<p>Columns are counted from 0, as csvdt counts them. <code>$0</code> is the first column and
+<code>$1</code> the second. <code>$*</code> is the whole record, as in csvdt, and <code>$NF</code> is the last
+column of each record.</p>
+<h2 id="the-key"><span class="num">1.3</span> The key</h2>
+<p>All the package's keys are under <kbd>C-c r</kbd>, which Tuatara labels <code>csv-columns</code>
+in the key help. There is one key so far: <kbd>C-c r a</kbd> runs <code>csv-rearrange-columns</code>.
+Chapter 4 lists it.</p>
+<div class="node end"><span>Next: <a href="02-rearranging-columns.html">Rearranging columns</a></span><span>Up: <a href="index.html">Contents</a></span></div>
+</article>
+</main>
+</div>
+</body>
+</html>

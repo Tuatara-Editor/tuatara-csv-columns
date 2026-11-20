@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src  'self'; img-src 'self' file:; script-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Rearranging columns &ndash; csv-columns Manual</title>
+<link rel="icon" href="tuatara.png">
+<link rel="stylesheet" href="manual.css">
+<script src="manual.js" defer></script>
+</head>
+<body>
+<div class="site">
+<nav class="toc" id="contents" aria-label="Contents">
+<strong>csv-columns Manual</strong>
+<small>for Tuatara 0.90.13 and later</small>
+<p class="tools"><a href="all.html">All on one page</a>
+<button type="button" class="theme" hidden>Dark</button></p>
+<input type="search" placeholder="Search the manual" aria-label="Search the manual">
+<ol class="chapters"><li id="nav-index"><a href="index.html">0 Contents</a></li><li id="nav-01-what-csv-columns-is"><a href="01-what-csv-columns-is.html">1 What csv-columns is</a><ol><li><a href="01-what-csv-columns-is.html#where-it-works">1.1 Where it works</a></li><li><a href="01-what-csv-columns-is.html#counting-from-0">1.2 Counting from 0</a></li><li><a href="01-what-csv-columns-is.html#the-key">1.3 The key</a></li></ol></li><li id="nav-02-rearranging-columns" class="here"><a class="here" href="02-rearranging-columns.html">2 Rearranging columns</a><ol><li><a href="02-rearranging-columns.html#what-a-column-can-be">2.1 What a column can be</a></li><li><a href="02-rearranging-columns.html#how-a-column-is-written">2.2 How a column is written</a></li><li><a href="02-rearranging-columns.html#which-lines">2.3 Which lines</a></li><li><a href="02-rearranging-columns.html#undoing">2.4 Undoing</a></li></ol></li><li id="nav-03-large-files-and-limits"><a href="03-large-files-and-limits.html">3 Large files and limits</a><ol><li><a href="03-large-files-and-limits.html#large-files">3.1 Large files</a></li><li><a href="03-large-files-and-limits.html#each-record-is-read-once">3.2 Each record is read once</a></li><li><a href="03-large-files-and-limits.html#limits">3.3 Limits</a></li></ol></li><li id="nav-04-every-command-and-setting"><a href="04-every-command-and-setting.html">4 Every command and setting</a><ol><li><a href="04-every-command-and-setting.html#every-command">4.1 Every command</a></li><li><a href="04-every-command-and-setting.html#every-setting">4.2 Every setting</a></li></ol></li></ol>
+</nav>
+<main>
+<article>
+<div class="node"><span>Previous: <a href="01-what-csv-columns-is.html">What csv-columns is</a></span><span>Next: <a href="03-large-files-and-limits.html">Large files and limits</a></span><span>Up: <a href="index.html">Contents</a></span></div>
+<h1 id="rearranging-columns">Rearranging columns</h1>
+<p class="lead">Asking for the columns, and what comes out.</p>
+<p><kbd>C-c r a</kbd> (<code>csv-rearrange-columns</code>) asks <code>Columns from $0 ($0,$2,$1&quot;text&quot;):</code>.
+Type the columns as awk's <code>print</code> writes them, counted from 0, separated by
+commas, and press <kbd>RET</kbd>. An empty answer changes nothing.</p>
+<p>For example, this answer on a file of five columns:</p>
+<pre class="ex">$0,$1,$3,$4&quot;cent&quot;,&quot;hello&quot;
+</pre>
+<p>leaves out the third column (<code>$2</code>), joins <code>cent</code> to the value of the fifth
+column, and adds a sixth column, now the fifth, that holds <code>hello</code>:</p>
+<pre class="ex">a,b,c,d,e   -&gt;   a,b,d,ecent,hello
+</pre>
+<h2 id="what-a-column-can-be"><span class="num">2.1</span> What a column can be</h2>
+<p>Each column is made of one or more parts, written side by side with nothing
+between them. Spaces between columns are ignored.</p>
+<ul>
+<li><code>$N</code> is column N, counted from 0.</li>
+<li><code>$NF</code> is the last column of each record. The last column is not the same
+  number on every record, so <code>$NF</code> follows the record.</li>
+<li><code>$*</code> is the whole record. Alone, its columns stay its own, so the record is
+  copied as it is. Joined to other parts, it is one column that holds the
+  record's text as written.</li>
+<li><code>&quot;text&quot;</code> is text as it stands. Inside it, <code>\&quot;</code> is a quote and <code>\\</code> is a
+  backslash.</li>
+</ul>
+<p>Parts side by side are joined into one column, as in <code>$4&quot;cent&quot;</code> or
+<code>$2&quot; &quot;$0</code>, which puts the third column, a space and the first column in one
+column.</p>
+<p>An answer that is not understood stops the command with a message that says
+where in the answer it went wrong. Nothing is changed. The messages are
+<code>A $ needs a number, NF or *</code>, <code>A quote is left open</code> and <code>Not understood</code>.</p>
+<h2 id="how-a-column-is-written"><span class="num">2.2</span> How a column is written</h2>
+<p>A column made of one field alone is written exactly as it stood, with its
+quotes if it had them.</p>
+<p>A column joined from parts, or made of text, is written anew. It is put in
+quotes when it needs them: when it holds the separator, a quote or a line end,
+or begins or ends with a space. A quote inside it is doubled.</p>
+<p>A column that a record does not have is empty, as in awk. The record <code>a,b</code> with
+the answer <code>$0,$3</code> comes out as <code>a,</code>.</p>
+<p>A byte-order mark at the start of the file stays at the start. It is not part
+of the first field.</p>
+<h2 id="which-lines"><span class="num">2.3</span> Which lines</h2>
+<p>Every line is rearranged, the header too, as awk would. With a selection, only
+the lines it touches are. A line that comes out as it was is left alone and is
+not counted as rearranged.</p>
+<p>When the command ends, the echo area says how many lines it rearranged. On an
+empty buffer, or a selection with no lines, it says <code>No records to rearrange</code>.</p>
+<h2 id="undoing"><span class="num">2.4</span> Undoing</h2>
+<p>The whole command is one step to undo, whatever the number of lines. Press <kbd>u</kbd>
+in modal editing, or the undo key of your editing style.</p>
+<div class="node end"><span>Previous: <a href="01-what-csv-columns-is.html">What csv-columns is</a></span><span>Next: <a href="03-large-files-and-limits.html">Large files and limits</a></span><span>Up: <a href="index.html">Contents</a></span></div>
+</article>
+</main>
+</div>
+</body>
+</html>
