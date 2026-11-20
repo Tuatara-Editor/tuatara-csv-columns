@@ -11,6 +11,11 @@ does. One of the Tuatara project's packages, not part of the editor.
 0, as [csvdt](https://github.com/yardquit/csvdt) counts them. The manual says
 what a column can be, how it is written and how large files are handled.
 
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="media/csv-columns-light.gif">
+  <img alt="A bird count in a CSV file with its columns rearranged by an answer like $3,$4,$1,$0, then joined to text, each change undone in one step." src="media/csv-columns.gif">
+</picture>
+
 ## What it needs
 
 - Tuatara 0.90.13 or later.
