@@ -1,0 +1,32 @@
+#+title: Large files and limits
+#+language: en
+
+* Large files and limits
+
+How the command behaves on a big file, and what it will not do.
+
+** Large files
+
+A large file is rearranged in the background, as a job, on all but two of the
+computer's cores, so the editor answers while it works. The letter =P= is lit
+in the mode line, and ~C-x j~ shows how far the job has got. The result is one
+step to undo, the same as for a small file.
+
+On a file of 11.5 GB with 100 million records, rearranging every record as in
+chapter 2 took 30 seconds.
+
+** Each record is read once
+
+Each record is read once and the new one is the only thing made. The package
+measures the new record first and then fills it, so a line of a large file costs
+no more than the line it becomes.
+
+** Limits
+
+- A record is a line. A quoted field that runs on over a line end is not one
+  field.
+- Up to 256 of a record's first fields are placed at once. Fields further on are
+  found one at a time, so a column number past 256 works, only more slowly.
+  Nothing in the settings changes the number.
+- The package works only on CSV and TSV buffers, and the columns are numbered
+  from 0, never from 1.
