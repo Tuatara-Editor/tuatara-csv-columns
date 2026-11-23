@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src  'self'; img-src 'self' file:; script-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Large files and limits &ndash; csv-columns Manual</title>
+<link rel="icon" href="tuatara.png">
+<link rel="stylesheet" href="manual.css">
+<script src="manual.js" defer></script>
+</head>
+<body>
+<div class="site">
+<nav class="toc" id="contents" aria-label="Contents">
+<strong>csv-columns Manual</strong>
+<small>for Tuatara 0.90.13 and later</small>
+<p class="tools"><a href="all.html">All on one page</a>
+<button type="button" class="theme" hidden>Dark</button></p>
+<input type="search" placeholder="Search the manual" aria-label="Search the manual">
+<ol class="chapters"><li id="nav-index"><a href="index.html">0 Contents</a></li><li id="nav-01-what-csv-columns-is"><a href="01-what-csv-columns-is.html">1 What csv-columns is</a><ol><li><a href="01-what-csv-columns-is.html#where-it-works">1.1 Where it works</a></li><li><a href="01-what-csv-columns-is.html#counting-from-0">1.2 Counting from 0</a></li><li><a href="01-what-csv-columns-is.html#the-key">1.3 The key</a></li></ol></li><li id="nav-02-rearranging-columns"><a href="02-rearranging-columns.html">2 Rearranging columns</a><ol><li><a href="02-rearranging-columns.html#what-a-column-can-be">2.1 What a column can be</a></li><li><a href="02-rearranging-columns.html#how-a-column-is-written">2.2 How a column is written</a></li><li><a href="02-rearranging-columns.html#which-lines">2.3 Which lines</a></li><li><a href="02-rearranging-columns.html#undoing">2.4 Undoing</a></li></ol></li><li id="nav-03-large-files-and-limits" class="here"><a class="here" href="03-large-files-and-limits.html">3 Large files and limits</a><ol><li><a href="03-large-files-and-limits.html#large-files">3.1 Large files</a></li><li><a href="03-large-files-and-limits.html#each-record-is-read-once">3.2 Each record is read once</a></li><li><a href="03-large-files-and-limits.html#limits">3.3 Limits</a></li></ol></li><li id="nav-04-every-command-and-setting"><a href="04-every-command-and-setting.html">4 Every command and setting</a><ol><li><a href="04-every-command-and-setting.html#every-command">4.1 Every command</a></li><li><a href="04-every-command-and-setting.html#every-setting">4.2 Every setting</a></li></ol></li></ol>
+</nav>
+<main>
+<article>
+<div class="node"><span>Previous: <a href="02-rearranging-columns.html">Rearranging columns</a></span><span>Next: <a href="04-every-command-and-setting.html">Every command and setting</a></span><span>Up: <a href="index.html">Contents</a></span></div>
+<h1 id="large-files-and-limits">Large files and limits</h1>
+<p class="lead">How the command behaves on a big file, and what it will not do.</p>
+<h2 id="large-files"><span class="num">3.1</span> Large files</h2>
+<p>A large file is rearranged in the background, as a job, on all but two of the
+computer's cores, so the editor answers while it works. The letter <code>P</code> is lit
+in the mode line, and <kbd>C-x j</kbd> shows how far the job has got. The result is one
+step to undo, the same as for a small file.</p>
+<p>On a file of 11.5 GB with 100 million records, rearranging every record as in
+chapter 2 took 30 seconds.</p>
+<h2 id="each-record-is-read-once"><span class="num">3.2</span> Each record is read once</h2>
+<p>Each record is read once and the new one is the only thing made. The package
+measures the new record first and then fills it, so a line of a large file costs
+no more than the line it becomes.</p>
+<h2 id="limits"><span class="num">3.3</span> Limits</h2>
+<ul>
+<li>A record is a line. A quoted field that runs on over a line end is not one
+  field.</li>
+<li>Up to 256 of a record's first fields are placed at once. Fields further on are
+  found one at a time, so a column number past 256 works, only more slowly.
+  Nothing in the settings changes the number.</li>
+<li>The package works only on CSV and TSV buffers, and the columns are numbered
+  from 0, never from 1.</li>
+</ul>
+<div class="node end"><span>Previous: <a href="02-rearranging-columns.html">Rearranging columns</a></span><span>Next: <a href="04-every-command-and-setting.html">Every command and setting</a></span><span>Up: <a href="index.html">Contents</a></span></div>
+</article>
+</main>
+</div>
+</body>
+</html>

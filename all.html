@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src  'self'; img-src 'self' file:; script-src 'self'; base-uri 'none'; form-action 'none'">
+<title>csv-columns Manual, all chapters</title>
+<link rel="icon" href="tuatara.png">
+<link rel="stylesheet" href="manual.css">
+<script src="manual.js" defer></script>
+</head>
+<body>
+<div class="site">
+<nav class="toc" id="contents" aria-label="Contents">
+<strong>csv-columns Manual</strong>
+<small>for Tuatara 0.90.13 and later</small>
+<p class="tools"><a href="index.html">By chapter</a>
+<button type="button" class="theme" hidden>Dark</button></p>
+<input type="search" placeholder="Search the manual" aria-label="Search the manual">
+<ol class="chapters"><li id="nav-index"><a href="index.html">0 Contents</a></li><li id="nav-01-what-csv-columns-is"><a href="#01-what-csv-columns-is">1 What csv-columns is</a><ol><li><a href="#01-what-csv-columns-is--where-it-works">1.1 Where it works</a></li><li><a href="#01-what-csv-columns-is--counting-from-0">1.2 Counting from 0</a></li><li><a href="#01-what-csv-columns-is--the-key">1.3 The key</a></li></ol></li><li id="nav-02-rearranging-columns"><a href="#02-rearranging-columns">2 Rearranging columns</a><ol><li><a href="#02-rearranging-columns--what-a-column-can-be">2.1 What a column can be</a></li><li><a href="#02-rearranging-columns--how-a-column-is-written">2.2 How a column is written</a></li><li><a href="#02-rearranging-columns--which-lines">2.3 Which lines</a></li><li><a href="#02-rearranging-columns--undoing">2.4 Undoing</a></li></ol></li><li id="nav-03-large-files-and-limits"><a href="#03-large-files-and-limits">3 Large files and limits</a><ol><li><a href="#03-large-files-and-limits--large-files">3.1 Large files</a></li><li><a href="#03-large-files-and-limits--each-record-is-read-once">3.2 Each record is read once</a></li><li><a href="#03-large-files-and-limits--limits">3.3 Limits</a></li></ol></li><li id="nav-04-every-command-and-setting"><a href="#04-every-command-and-setting">4 Every command and setting</a><ol><li><a href="#04-every-command-and-setting--every-command">4.1 Every command</a></li><li><a href="#04-every-command-and-setting--every-setting">4.2 Every setting</a></li></ol></li></ol>
+</nav>
+<main>
+<article>
+<h1>csv-columns Manual</h1>
+<p class="lead">for Tuatara 0.90.13 and later, every chapter on one page</p>
+<p>This manual is written with modal editing on, first and foremost. Where a command also has a key that works with modal editing off, it is given as well, as the non-modal key.</p>
+<section class="chapter" id="01-what-csv-columns-is">
+<h1 id="01-what-csv-columns-is--what-csv-columns-is">What csv-columns is</h1>
+<p class="lead">The package that rearranges the columns of a CSV or TSV file as awk's <code>print</code>
+does.</p>
+<p>csv-columns adds one command to Tuatara's CSV mode. It reads a list of columns,
+such as <code>$0,$2,$1&quot;text&quot;</code>, and rewrites every record of the buffer to hold
+those columns, in that order. A column can be a field of the record, a piece of
+text, or the two joined.</p>
+<p>The package does not keep, delete, show or hide records by the value of a
+column. Tuatara does that itself: <kbd>C-x / k</kbd>, <kbd>C-x / d</kbd>, <kbd>C-x / f</kbd> and <kbd>C-x / h</kbd>.
+They are in the editor's manual.</p>
+<h2 id="01-what-csv-columns-is--where-it-works"><span class="num">1.1</span> Where it works</h2>
+<p>The command is bound in CSV mode, and so in a buffer of a CSV file or a TSV
+(tab-separated values) file. The separator is the one the mode found for the
+buffer, a comma or a tab. In any other buffer the command is not bound.</p>
+<p>A record is a line, as CSV mode reads one. A quoted field does not run on over
+a line end.</p>
+<h2 id="01-what-csv-columns-is--counting-from-0"><span class="num">1.2</span> Counting from 0</h2>
+<p>Columns are counted from 0, as csvdt counts them. <code>$0</code> is the first column and
+<code>$1</code> the second. <code>$*</code> is the whole record, as in csvdt, and <code>$NF</code> is the last
+column of each record.</p>
+<h2 id="01-what-csv-columns-is--the-key"><span class="num">1.3</span> The key</h2>
+<p>All the package's keys are under <kbd>C-c r</kbd>, which Tuatara labels <code>csv-columns</code>
+in the key help. There is one key so far: <kbd>C-c r a</kbd> runs <code>csv-rearrange-columns</code>.
+Chapter 4 lists it.</p>
+</section>
+<section class="chapter" id="02-rearranging-columns">
+<h1 id="02-rearranging-columns--rearranging-columns">Rearranging columns</h1>
+<p class="lead">Asking for the columns, and what comes out.</p>
+<p><kbd>C-c r a</kbd> (<code>csv-rearrange-columns</code>) asks <code>Columns from $0 ($0,$2,$1&quot;text&quot;):</code>.
+Type the columns as awk's <code>print</code> writes them, counted from 0, separated by
+commas, and press <kbd>RET</kbd>. An empty answer changes nothing.</p>
+<p>For example, this answer on a file of five columns:</p>
+<pre class="ex">$0,$1,$3,$4&quot;cent&quot;,&quot;hello&quot;
+</pre>
+<p>leaves out the third column (<code>$2</code>), joins <code>cent</code> to the value of the fifth
+column, and adds a sixth column, now the fifth, that holds <code>hello</code>:</p>
+<pre class="ex">a,b,c,d,e   -&gt;   a,b,d,ecent,hello
+</pre>
+<h2 id="02-rearranging-columns--what-a-column-can-be"><span class="num">2.1</span> What a column can be</h2>
+<p>Each column is made of one or more parts, written side by side with nothing
+between them. Spaces between columns are ignored.</p>
+<ul>
+<li><code>$N</code> is column N, counted from 0.</li>
+<li><code>$NF</code> is the last column of each record. The last column is not the same
+  number on every record, so <code>$NF</code> follows the record.</li>
+<li><code>$*</code> is the whole record. Alone, its columns stay its own, so the record is
+  copied as it is. Joined to other parts, it is one column that holds the
+  record's text as written.</li>
+<li><code>&quot;text&quot;</code> is text as it stands. Inside it, <code>\&quot;</code> is a quote and <code>\\</code> is a
+  backslash.</li>
+</ul>
+<p>Parts side by side are joined into one column, as in <code>$4&quot;cent&quot;</code> or
+<code>$2&quot; &quot;$0</code>, which puts the third column, a space and the first column in one
+column.</p>
+<p>An answer that is not understood stops the command with a message that says
+where in the answer it went wrong. Nothing is changed. The messages are
+<code>A $ needs a number, NF or *</code>, <code>A quote is left open</code> and <code>Not understood</code>.</p>
+<h2 id="02-rearranging-columns--how-a-column-is-written"><span class="num">2.2</span> How a column is written</h2>
+<p>A column made of one field alone is written exactly as it stood, with its
+quotes if it had them.</p>
+<p>A column joined from parts, or made of text, is written anew. It is put in
+quotes when it needs them: when it holds the separator, a quote or a line end,
+or begins or ends with a space. A quote inside it is doubled.</p>
+<p>A column that a record does not have is empty, as in awk. The record <code>a,b</code> with
+the answer <code>$0,$3</code> comes out as <code>a,</code>.</p>
+<p>A byte-order mark at the start of the file stays at the start. It is not part
+of the first field.</p>
+<h2 id="02-rearranging-columns--which-lines"><span class="num">2.3</span> Which lines</h2>
+<p>Every line is rearranged, the header too, as awk would. With a selection, only
+the lines it touches are. A line that comes out as it was is left alone and is
+not counted as rearranged.</p>
+<p>When the command ends, the echo area says how many lines it rearranged. On an
+empty buffer, or a selection with no lines, it says <code>No records to rearrange</code>.</p>
+<h2 id="02-rearranging-columns--undoing"><span class="num">2.4</span> Undoing</h2>
+<p>The whole command is one step to undo, whatever the number of lines. Press <kbd>u</kbd>
+in modal editing, or the undo key of your editing style.</p>
+</section>
+<section class="chapter" id="03-large-files-and-limits">
+<h1 id="03-large-files-and-limits--large-files-and-limits">Large files and limits</h1>
+<p class="lead">How the command behaves on a big file, and what it will not do.</p>
+<h2 id="03-large-files-and-limits--large-files"><span class="num">3.1</span> Large files</h2>
+<p>A large file is rearranged in the background, as a job, on all but two of the
+computer's cores, so the editor answers while it works. The letter <code>P</code> is lit
+in the mode line, and <kbd>C-x j</kbd> shows how far the job has got. The result is one
+step to undo, the same as for a small file.</p>
+<p>On a file of 11.5 GB with 100 million records, rearranging every record as in
+chapter 2 took 30 seconds.</p>
+<h2 id="03-large-files-and-limits--each-record-is-read-once"><span class="num">3.2</span> Each record is read once</h2>
+<p>Each record is read once and the new one is the only thing made. The package
+measures the new record first and then fills it, so a line of a large file costs
+no more than the line it becomes.</p>
+<h2 id="03-large-files-and-limits--limits"><span class="num">3.3</span> Limits</h2>
+<ul>
+<li>A record is a line. A quoted field that runs on over a line end is not one
+  field.</li>
+<li>Up to 256 of a record's first fields are placed at once. Fields further on are
+  found one at a time, so a column number past 256 works, only more slowly.
+  Nothing in the settings changes the number.</li>
+<li>The package works only on CSV and TSV buffers, and the columns are numbered
+  from 0, never from 1.</li>
+</ul>
+</section>
+<section class="chapter" id="04-every-command-and-setting">
+<h1 id="04-every-command-and-setting--every-command-and-setting">Every command and setting</h1>
+<p class="lead">Each command and setting of csv-columns, to look one up by name.</p>
+<p>The tables are made from the program each time this manual is made, so they
+never list a command or setting that csv-columns does not have. The first
+table has four columns. The first two are keys: the modal keys, which work only
+with modal editing on, and the non-modal keys, which work with it off too. A
+command with no key says <kbd>M-x</kbd> and its name in the second column, because you
+can only run it by its name. The third column is the name of the command and the
+fourth says what it does.</p>
+<p>To run a command by its name, press <kbd>M-x</kbd>, type a few letters of the name and
+press <kbd>RET</kbd>. To find a command from within the editor, press <kbd>C-h f</kbd>. To find
+the command that a key runs, press <kbd>C-h k</kbd> and then the key. The editor's own
+settings and commands are in chapters 21 and 22 of its manual.</p>
+<p>csv-columns has no settings of its own, so the second table is empty.</p>
+<h2 id="04-every-command-and-setting--every-command"><span class="num">4.1</span> Every command</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr><th>Modal</th><th>Non-modal</th><th>Command</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td><kbd>C-c r a</kbd></td><td><code>csv-rearrange-columns</code></td><td>Rearrange the columns of every record, the columns asked for counted from 0: $0,$1,$3,$4&quot;cent&quot;,&quot;hello&quot; leaves out the third column, joins cent to the fifth's value and adds a column holding hello.</td></tr>
+</tbody></table></div>
+<h2 id="04-every-command-and-setting--every-setting"><span class="num">4.2</span> Every setting</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr><th>Setting</th><th>Default</th><th>Values</th><th>What it changes</th></tr>
+</thead>
+<tbody>
+</tbody></table></div>
+</section>
+</article>
+</main>
+</div>
+</body>
+</html>
