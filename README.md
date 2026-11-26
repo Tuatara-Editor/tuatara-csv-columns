@@ -8,7 +8,7 @@ does. One of the Tuatara project's packages, not part of the editor.
 
 `C-c r a` in a CSV buffer asks for the columns you want, such as
 `$0,$2,$1"text"`, and rewrites the file to hold them. Columns are counted from
-0, as [csvdt](https://github.com/yardquit/csvdt) counts them. The manual says
+0, as [csvdt](https://github.com/YardQuit/csvdt) counts them. The manual says
 what a column can be, how it is written and how large files are handled.
 
 <picture>
